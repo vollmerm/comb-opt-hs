@@ -36,9 +36,9 @@ instance Evaluation Integer where
     the ideal evaluation, we shortcut and just return that. -}
 best :: Evaluation r => [r] -> r
 best [] = error "Empty list"
-best [r] = r
-best (r:rs) = if ideal r then r
-              else if seq r' $ r `improves` r'
-                   then r
-                   else r'
-  where r' = best rs
+best rs = findBest rs id -- Using continuation passing style
+  where findBest [r]    k = k r
+        findBest (r:rs) k =
+          if ideal r then r -- Don't call k, just return
+          else findBest rs $ \r' ->
+               if r' `improves` r then k r' else k r
