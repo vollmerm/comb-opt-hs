@@ -14,6 +14,8 @@
 --
 module Control.Optimization.Evaluation where
 
+import Data.Word
+
 {-| An evaluation is something returned from an evaluation function
     during a search. The search strategies need to know a few things
     about these results.
@@ -29,9 +31,9 @@ class Evaluation a where
       interchangably.-}
   equivalent :: a -> a -> Bool
 
-{-| An example instance of Evaluation for Ints, where lower numbers are better
+{-| An example instance of Evaluation for Word32, where lower numbers are better
     and 0 is the best. -}
-instance Evaluation Int where
+instance Evaluation Word32 where
   ideal 0 = True
   ideal _ = False
   improves = (<)
